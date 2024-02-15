@@ -1,15 +1,23 @@
-import { createBrowserRouter } from 'react-router-dom'
-import { ErrorPage, Login } from './pages'
+import { ToastContainer } from "react-toastify"
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { PrivateRoute } from "./private"
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <div><h1>Home</h1></div>,
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <ErrorPage />
-  }
-])
+import { Home, Login, ErrorPage } from "./pages"
+
+export const BrowserRoutes = () => {
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer closeOnClick />
+    </>
+  )
+}
