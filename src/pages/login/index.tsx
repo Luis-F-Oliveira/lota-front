@@ -1,9 +1,11 @@
-import { FormEventHandler, useEffect, useRef, useState } from "react"
+import { FormEventHandler, useContext, useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from  "@radix-ui/react-label"
 import { Lock, Mail } from "lucide-react"
-import { AuthService } from "@/services"
+import { useUser } from "@/context/user"
 import image from './img.jpg'
+import { AuthService, AuthenticateStatus } from "@/services/auth/login"
+import { AxiosContext } from "@/context"
 
 declare var particlesJS: any
 type StateType<T> = [T, (newValue: T) => void]
@@ -11,14 +13,18 @@ type StateType<T> = [T, (newValue: T) => void]
 export const Login = () => {
   const [ email, setEmail ]: StateType<string> = useState('')
   const [ password, setPassword ]: StateType<string> = useState('')
+  const { loginUser } = useUser()
   const { auth } = AuthService()
-
+  const { api } = useContext(AxiosContext)
   const particlesRef = useRef<HTMLDivElement>(null)
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
+    const response: AuthenticateStatus = await auth(api, email, password)
 
-    auth(email, password)
+    if (response.success) {
+      console.log(response)
+    }
   }
 
   useEffect(() => {

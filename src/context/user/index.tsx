@@ -1,15 +1,9 @@
 import { ReactNode, createContext, useState, useContext } from 'react'
-
-interface User {
-    id: number,
-    user_id: number,
-    theme: boolean,
-    first: boolean
-}
+import { UserData } from '@/@types/user'
 
 interface UserContextProps {
-    user: User | null,
-    loginUser: (userData: User) => void,
+    user: UserData | null,
+    loginUser: (userData: UserData) => void,
     logoutUser: () => void
 }
 
@@ -30,12 +24,12 @@ interface UserProviderProps {
 
 export function UserProvider({ children }: UserProviderProps)
 {
-    const [user, setUser] = useState<User | null>(() => {
+    const [user, setUser] = useState<UserData | null>(() => {
         const savedUser = localStorage.getItem('user');
         return savedUser ? JSON.parse(savedUser) : null;
     })
 
-    function loginUser(userData: User)
+    function loginUser(userData: UserData)
     {
         setUser(userData)
         localStorage.setItem('user', JSON.stringify(userData))
@@ -45,6 +39,7 @@ export function UserProvider({ children }: UserProviderProps)
     {
         setUser(null)
         localStorage.removeItem('user')
+        window.location.reload()
     }
 
     return (

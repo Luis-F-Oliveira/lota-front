@@ -3,8 +3,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PrivateRoute } from "./private"
 
 import { Home, Login, ErrorPage } from "./pages"
+import { useUser } from "./context/user"
 
 export const BrowserRoutes = () => {
+  const { user } = useUser()
+  console.log(user?.theme)
   return (
     <>
       <BrowserRouter>
@@ -17,7 +20,7 @@ export const BrowserRoutes = () => {
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
-      <ToastContainer closeOnClick />
+      <ToastContainer closeOnClick theme={`${user?.theme ? 'dark' : 'light'}`} />
     </>
   )
 }
